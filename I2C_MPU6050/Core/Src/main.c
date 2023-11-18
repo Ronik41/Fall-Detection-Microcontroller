@@ -120,9 +120,16 @@ void mpu6050_read(){
 	y_acc = ((int16_t)ydata[0] <<8) + ydata[1];
 	HAL_I2C_Mem_Read(&hi2c1, (DEVICE_ADDRESS<<1)+1, 63, 1, zdata, 2,  100);
 	z_acc = ((int16_t)zdata[0] <<8) + zdata[1];
-	printf("x axis acceleration: %d \n", x_acc);
-	printf("y axis acceleration: %d \n", y_acc);
-	printf("z axis acceleration: %d \n", z_acc);
+	float scale_factor = 9.8 / 16384.0;
+
+	    // Convert and print as integers
+	int x_acc_mps2 = (int)(x_acc * scale_factor * 100);  // Multiply by 100 for two decimal places
+	int y_acc_mps2 = (int)(y_acc * scale_factor * 100);
+	int z_acc_mps2 = (int)(z_acc * scale_factor * 100);
+
+	printf("x axis acceleration: %d.%02d m/s^2\n", x_acc_mps2 / 100, x_acc_mps2 % 100);
+	printf("y axis acceleration: %d.%02d m/s^2\n", y_acc_mps2 / 100, y_acc_mps2 % 100);
+	printf("z axis acceleration: %d.%02d m/s^2\n", z_acc_mps2 / 100, z_acc_mps2 % 100);
 }
 /* USER CODE END 0 */
 
