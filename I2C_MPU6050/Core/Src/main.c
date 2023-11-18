@@ -56,6 +56,7 @@
 
 /* Private variables ---------------------------------------------------------*/
 I2C_HandleTypeDef hi2c1;
+bool triggered = false;
 
 UART_HandleTypeDef huart2;
 
@@ -173,7 +174,13 @@ int main(void)
   while (1)
   {
 	  mpu6050_read();
-	  HAL_GPIO_TogglePin (GPIOA, GPIO_PIN_5);
+	  if((z_acc_mps2 / 100)>10)
+	  {
+		  triggered = true;
+	  }
+	  while(triggered){
+		  HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+	  }
 	  HAL_Delay(100);
     /* USER CODE END WHILE */
 
