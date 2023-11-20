@@ -56,7 +56,6 @@
 
 /* Private variables ---------------------------------------------------------*/
 I2C_HandleTypeDef hi2c1;
-bool triggered = false;
 
 UART_HandleTypeDef huart2;
 
@@ -108,7 +107,7 @@ void mpu6050_init(){
 		  printf("Failed to exit from sleep mode \n");
 		}
 }
-void mpu6050_read(){
+float mpu6050_read(){
 	uint8_t data[2];
 	int16_t x_acc;
 	uint8_t ydata[2];
@@ -128,9 +127,10 @@ void mpu6050_read(){
 	int y_acc_mps2 = (int)(y_acc * scale_factor * 100);
 	int z_acc_mps2 = (int)(z_acc * scale_factor * 100);
 
-	printf("x axis acceleration: %d.%02d m/s^2\n", x_acc_mps2 / 100, x_acc_mps2 % 100);
-	printf("y axis acceleration: %d.%02d m/s^2\n", y_acc_mps2 / 100, y_acc_mps2 % 100);
-	printf("z axis acceleration: %d.%02d m/s^2\n", z_acc_mps2 / 100, z_acc_mps2 % 100);
+//	printf("x axis acceleration: %d.%02d m/s^2\n", x_acc_mps2 / 100, x_acc_mps2 % 100);
+	//printf("y axis acceleration: %d.%02d m/s^2\n", y_acc_mps2 / 100, y_acc_mps2 % 100);
+	printf("z axis acceleration: %d.%02d m/s^2\n", z_acc_mps2/100);
+	return(z_acc_mps2);
 }
 /* USER CODE END 0 */
 
@@ -173,21 +173,17 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  mpu6050_read();
-	  if((z_acc_mps2 / 100)>10)
-	  {
-		  triggered = true;
+	  if(-3>(mpu6050_read()/100)){
+		  while(1){
+		  HAL_GPIO_TogglePin (GPIOA, GPIO_PIN_5);
+	      HAL_Delay(100);
+		  }
 	  }
-	  while(triggered){
-		  HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-	  }
-	  HAL_Delay(100);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
-  HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
 }
 
 /**
