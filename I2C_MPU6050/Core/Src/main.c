@@ -22,6 +22,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include <stdio.h>
+#include <math.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -129,8 +130,8 @@ float mpu6050_read(){
 
 //	printf("x axis acceleration: %d.%02d m/s^2\n", x_acc_mps2 / 100, x_acc_mps2 % 100);
 	//printf("y axis acceleration: %d.%02d m/s^2\n", y_acc_mps2 / 100, y_acc_mps2 % 100);
-	printf("z axis acceleration: %d.%02d m/s^2\n", z_acc_mps2/100);
-	return(z_acc_mps2);
+	printf("acc magnitude", sqrt((z_acc_mps2*z_acc_mps2/100)+(y_acc_mps2*y_acc_mps2/100)+(x_acc_mps2*x_acc_mps2/100));
+	return(sqrt((z_acc_mps2*z_acc_mps2/100)+(y_acc_mps2*y_acc_mps2/100)+(x_acc_mps2*x_acc_mps2/100));
 }
 /* USER CODE END 0 */
 
